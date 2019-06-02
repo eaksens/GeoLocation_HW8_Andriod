@@ -1,9 +1,12 @@
 package com.example.geocalculatorapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -12,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.example.geocalculatorapp.dummy.HistoryContent;
 import org.joda.time.DateTime;
-
 
 
 public class MainActivity extends AppCompatActivity {
@@ -64,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
             endPoint.setLatitude(lat2value);
             endPoint.setLongitude(long2value);
 
-            float distance = (startPoint.distanceTo(endPoint))/1000;
-            float bearing = (startPoint.bearingTo(endPoint));
+            double distance = (startPoint.distanceTo(endPoint))/1000;
+            double bearing = (startPoint.bearingTo(endPoint));
 
             if (disUnit.equals("Miles")) {
                 distance *= kmToMiles;
@@ -78,12 +80,20 @@ public class MainActivity extends AppCompatActivity {
             String bearingString = String.format("%.2f "+ bearingUnit, bearing);
             calDistance.setText(distanceString);
             calBearing.setText(bearingString);
+            hideKeyboard();
 
-            HistoryContent.HistoryItem item = new HistoryContent.HistoryItem(lat1.toString(),
-                    long1.toString(), lat2.toString(), long2.toString(), DateTime.now());
-            HistoryContent.addItem(item);
         } catch (Exception e) {
             return;
+        }
+    }
+    private void hideKeyboard()
+    {
+        // Check if no view has focus:
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            //this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 
@@ -100,12 +110,12 @@ public class MainActivity extends AppCompatActivity {
         Button calBtn = findViewById(R.id.calculate);
         Button clearBtn = findViewById(R.id.clearBtn);
 
-        lat1 = findViewById(R.id.lat1);
-        lat2 = findViewById(R.id.lat2);
-        long1 = findViewById(R.id.long1);
-        long2 = findViewById(R.id.long2);
-        calDistance = findViewById(R.id.calDistance);
-        calBearing = findViewById(R.id.calBearing);
+        lat1 = (EditText) findViewById(R.id.lat1);
+        lat2 = (EditText) findViewById(R.id.lat2);
+        long1 = (EditText) findViewById(R.id.long1);
+        long2 = (EditText) findViewById(R.id.long2);
+        calDistance = (TextView) findViewById(R.id.calDistance);
+        calBearing = (TextView) findViewById(R.id.calBearing);
 
         //Press Clear button the all values are clear
         clearBtn.setOnClickListener(v -> {

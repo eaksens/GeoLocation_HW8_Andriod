@@ -32,8 +32,6 @@ public class HistoryActivity extends AppCompatActivity implements HistoryFragmen
     @Override
     public void onListFragmentInteraction(HistoryContent.HistoryItem item) {
         System.out.println("Interact!");
-        //Update the fragment listener method in the HistoryActivity
-        // to return the selected value to the MainActivity:
         Intent intent = new Intent();
         String[] vals = {item.origLat, item.origLng, item.destLat, item.destLng};
         intent.putExtra("item", vals);

@@ -27,7 +27,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         mValues = items;
         mListener = listener;
     }
-
+    //ViewHolder creating and defining data structure that hold convient references to individual control that shows up in individual content
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -35,8 +35,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         return new ViewHolder(view);
     }
 
+
     @Override
-    //binding need to be adjust to handle the new layout
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mP1.setText("(" + holder.mItem.origLat + "," + holder.mItem.origLng + ")");
@@ -54,6 +54,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             }
         });
     }
+
 
     @Override
     public int getItemCount() {
