@@ -80,8 +80,6 @@ public class unitSettingActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
-
     }
 
 }

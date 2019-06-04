@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
             computeValues();
         }
         //passing on the history result from the HistoryActivity to MainPage
-        else if(requestCode == HISTORY_RESULT){
+        else if(resultCode == HISTORY_RESULT){
             String[] vals = data.getStringArrayExtra("item");
             this.lat1.setText(vals[0]);
             this.long1.setText(vals[1]);
