@@ -38,6 +38,43 @@ public class MainActivity extends AppCompatActivity {
     private TextView calDistance = null;
     private TextView calBearing = null;
 
+    //on create Android Life Cycle -main method when launching the application
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main_activity); //where to get UI from -in this case, it's under layout folder on main_activity.xml
+        //toolbar
+        Toolbar myToolBar = findViewById(R.id.mainToolbar);
+        setSupportActionBar(myToolBar);
+
+
+        Button calBtn = findViewById(R.id.calculate);
+        Button clearBtn = findViewById(R.id.clearBtn);
+
+        lat1 = (EditText) findViewById(R.id.lat1);
+        lat2 = (EditText) findViewById(R.id.lat2);
+        long1 = (EditText) findViewById(R.id.long1);
+        long2 = (EditText) findViewById(R.id.long2);
+        calDistance = (TextView) findViewById(R.id.calDistance);
+        calBearing = (TextView) findViewById(R.id.calBearing);
+
+        //Press Clear button the all values are clear
+        clearBtn.setOnClickListener(v -> {
+            clearValues();
+        });
+
+        //Press Calculate button
+        //listener set on click of your calculation button
+        calBtn.setOnClickListener(v -> {
+            HistoryContent.HistoryItem item = new
+                    HistoryContent.HistoryItem(lat1.getText().toString(),
+                    long1.getText().toString(), lat2.getText().toString(), long2.getText().toString(), DateTime.now());
+            HistoryContent.addItem(item);
+            computeValues();
+            // remember the calculation.
+        });
+    }
+
 
     //clear button
     private  void clearValues() {
@@ -96,44 +133,6 @@ public class MainActivity extends AppCompatActivity {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
-
-    //on create Android Life Cycle -main method when launching the application
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity); //where to get UI from -in this case, it's under layout folder on main_activity.xml
-        //toolbar
-        Toolbar myToolBar = findViewById(R.id.mainToolbar);
-        setSupportActionBar(myToolBar);
-
-
-        Button calBtn = findViewById(R.id.calculate);
-        Button clearBtn = findViewById(R.id.clearBtn);
-
-        lat1 = (EditText) findViewById(R.id.lat1);
-        lat2 = (EditText) findViewById(R.id.lat2);
-        long1 = (EditText) findViewById(R.id.long1);
-        long2 = (EditText) findViewById(R.id.long2);
-        calDistance = (TextView) findViewById(R.id.calDistance);
-        calBearing = (TextView) findViewById(R.id.calBearing);
-
-        //Press Clear button the all values are clear
-        clearBtn.setOnClickListener(v -> {
-            clearValues();
-        });
-
-        //Press Calculate button
-        //listener set on click of your calculation button
-        calBtn.setOnClickListener(v -> {
-            HistoryContent.HistoryItem item = new
-                    HistoryContent.HistoryItem(lat1.getText().toString(),
-                    long1.getText().toString(), lat2.getText().toString(), long2.getText().toString(), DateTime.now());
-            HistoryContent.addItem(item);
-            computeValues();
-            // remember the calculation.
-        });
-    }
-
 
     //setup the setting menu
     @Override
