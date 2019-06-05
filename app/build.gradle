@@ -39,4 +39,9 @@ dependencies {
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.truizlop.sectionedrecyclerview:library:1.2.0'
     testImplementation 'junit:junit:4.12'
+    // firebase config
+    implementation 'com.google.firebase:firebase-database:16.1.0'
+
 }
+apply plugin: 'com.google.gms.google-services'
+
