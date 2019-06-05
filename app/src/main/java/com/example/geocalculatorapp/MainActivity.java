@@ -13,14 +13,25 @@ import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.example.geocalculatorapp.dummy.HistoryContent;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
     //identifier when the picker selected back
     public static final int UNITS_SELECTION = 1;
     public static final int HISTORY_RESULT = 2;
+
+    // db reference
+    DatabaseReference topRef;
 
     //unit variables: initialize
     private String disUnit = "Miles";
@@ -31,12 +42,14 @@ public class MainActivity extends AppCompatActivity {
     final Double degreeToMils = 17.777777777778;
 
     //reference to the UI use the findViewById
-    private EditText lat1 = null;
-    private EditText long1 = null;
-    private EditText lat2 = null;
-    private EditText long2 = null;
-    private TextView calDistance = null;
-    private TextView calBearing = null;
+    private EditText origLatField = null;
+    private EditText origLngField = null;
+    private EditText destLatField = null;
+    private EditText destLngField = null;
+    private TextView calDistanceBtn = null;
+    private TextView calBearingBtn = null;
+
+    static List<LocationLookup> locations;
 
     //on create Android Life Cycle -main method when launching the application
     @Override
@@ -47,16 +60,18 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolBar = findViewById(R.id.mainToolbar);
         setSupportActionBar(myToolBar);
 
+        locations = new ArrayList<>();
+
 
         Button calBtn = findViewById(R.id.calculate);
         Button clearBtn = findViewById(R.id.clearBtn);
 
-        lat1 = (EditText) findViewById(R.id.lat1);
-        lat2 = (EditText) findViewById(R.id.lat2);
-        long1 = (EditText) findViewById(R.id.long1);
-        long2 = (EditText) findViewById(R.id.long2);
-        calDistance = (TextView) findViewById(R.id.calDistance);
-        calBearing = (TextView) findViewById(R.id.calBearing);
+        origLatField = findViewById(R.id.lat1);
+        destLatField = findViewById(R.id.lat2);
+        origLngField = findViewById(R.id.long1);
+        destLngField = findViewById(R.id.long2);
+        calDistanceBtn = findViewById(R.id.calDistance);
+        calBearingBtn = findViewById(R.id.calBearing);
 
         //Press Clear button the all values are clear
         clearBtn.setOnClickListener(v -> {
@@ -66,11 +81,22 @@ public class MainActivity extends AppCompatActivity {
         //Press Calculate button
         //listener set on click of your calculation button
         calBtn.setOnClickListener(v -> {
-            HistoryContent.HistoryItem item = new
-                    HistoryContent.HistoryItem(lat1.getText().toString(),
-                    long1.getText().toString(), lat2.getText().toString(), long2.getText().toString(), DateTime.now());
-            HistoryContent.addItem(item);
+
+            String origLat =origLatField.getText().toString();
+            String destLat = destLatField.getText().toString();
+            String origLng = origLngField.getText().toString();
+            String destLng = destLngField.getText().toString();
+
+            LocationLookup entry = new LocationLookup();
+            entry.setOrigLat(origLat);
+            entry.setDestLat(destLat);
+            entry.setOrigLng(origLng);
+            entry.setDestLng(destLng);
+            DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
+            entry.setTimeStamp(formatter.print(DateTime.now()));
             computeValues();
+            topRef.push().setValue(entry);
+
             // remember the calculation.
         });
     }
@@ -78,22 +104,22 @@ public class MainActivity extends AppCompatActivity {
 
     //clear button
     private  void clearValues() {
-        lat1.setText("");
-        long1.setText("");
-        lat2.setText("");
-        long2.setText("");
-        calDistance.setText("");
-        calBearing.setText("");
+        origLatField.setText("");
+        origLngField.setText("");
+        destLatField.setText("");
+        destLngField.setText("");
+        calDistanceBtn.setText("");
+        calBearingBtn.setText("");
 
     }
 
     //compute the values
     private void computeValues() {
         try {
-            Double lat1value = Double.parseDouble(lat1.getText().toString());
-            Double long1value = Double.parseDouble(long1.getText().toString());
-            Double lat2value = Double.parseDouble(lat2.getText().toString());
-            Double long2value = Double.parseDouble(long2.getText().toString());
+            Double lat1value = Double.parseDouble(origLatField.getText().toString());
+            Double long1value = Double.parseDouble(origLngField.getText().toString());
+            Double lat2value = Double.parseDouble(destLatField.getText().toString());
+            Double long2value = Double.parseDouble(destLngField.getText().toString());
 
             Location startPoint = new Location("a");
             Location endPoint = new Location("b");
@@ -115,8 +141,8 @@ public class MainActivity extends AppCompatActivity {
 
             String distanceString = String.format("%.2f "+ disUnit, distance);
             String bearingString = String.format("%.2f "+ bearingUnit, bearing);
-            calDistance.setText(distanceString);
-            calBearing.setText(bearingString);
+            calDistanceBtn.setText(distanceString);
+            calBearingBtn.setText(bearingString);
             hideKeyboard();
 
         } catch (Exception e) {
@@ -181,13 +207,18 @@ public class MainActivity extends AppCompatActivity {
         //passing on the history result from the HistoryActivity to MainPage
         else if(resultCode == HISTORY_RESULT){
             String[] vals = data.getStringArrayExtra("item");
-            this.lat1.setText(vals[0]);
-            this.long1.setText(vals[1]);
-            this.lat2.setText(vals[2]);
-            this.long2.setText(vals[3]);
+            this.origLatField.setText(vals[0]);
+            this.origLngField.setText(vals[1]);
+            this.destLatField.setText(vals[2]);
+            this.destLngField.setText(vals[3]);
             this.computeValues();
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        topRef = FirebaseDatabase.getInstance().getReference();
+    }
 
 }
