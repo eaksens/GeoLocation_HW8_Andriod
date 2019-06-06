@@ -24,4 +24,5 @@
     <string name="org_location">Enter First Location</string>
     <string name="dst_location">Enter Second Location</string>
     <string name="location_info">Location Information</string>
+    <string name="date_info">Calculation Date</string>
 </resources>
