@@ -3,20 +3,29 @@
     package="com.example.geocalculatorapp">
 
     <application
+        android:name=".GeoCalculatorApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name=".GeoCalculatorApp"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity
+            android:name=".SearchActivity"
+            android:label="@string/title_activity_search"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.geocalculatorapp.MainActivity" />
+        </activity>
         <activity
             android:name=".HistoryActivity"
             android:label="@string/title_activity_history"
-            android:theme="@style/NoActionBar"></activity>
+            android:theme="@style/NoActionBar" />
         <activity
             android:name=".unitSettingActivity"
-            android:label="@string/title_activity_unit_setting"></activity>
+            android:label="@string/title_activity_unit_setting" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

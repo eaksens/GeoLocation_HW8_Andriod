@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     //identifier when the picker selected back
     public static final int UNITS_SELECTION = 1;
     public static final int HISTORY_RESULT = 2;
+    public static final int PLACES_RESULT = 3;
 
     // db reference
     DatabaseReference topRef;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText destLngField = null;
     private TextView calDistanceBtn = null;
     private TextView calBearingBtn = null;
+    private Button searchBtn = null;
 
     static List<LocationLookup> locations;
 
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         destLngField = findViewById(R.id.long2);
         calDistanceBtn = findViewById(R.id.calDistance);
         calBearingBtn = findViewById(R.id.calBearing);
+        searchBtn = findViewById(R.id.searchBtn);
 
         //Press Clear button the all values are clear
         clearBtn.setOnClickListener(v -> {
@@ -98,6 +101,11 @@ public class MainActivity extends AppCompatActivity {
             topRef.push().setValue(entry);
 
             // remember the calculation.
+        });
+
+        searchBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+            startActivityForResult(intent, PLACES_RESULT);
         });
     }
 
