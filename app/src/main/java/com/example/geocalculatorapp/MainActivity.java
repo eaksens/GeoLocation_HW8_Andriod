@@ -3,6 +3,7 @@ package com.example.geocalculatorapp;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         //toolbar
         Toolbar myToolBar = findViewById(R.id.mainToolbar);
         setSupportActionBar(myToolBar);
-        Places.initialize(getApplicationContext(), "key");
+        Places.initialize(getApplicationContext(), "AIzaSyCphNQr5GfP7SQW7f8p-blkvMrtoeTg8co");
         locations = new ArrayList<>();
         Button calBtn = findViewById(R.id.calculate);
         Button clearBtn = findViewById(R.id.clearBtn);
@@ -218,6 +220,17 @@ public class MainActivity extends AppCompatActivity {
             this.destLatField.setText(vals[2]);
             this.destLngField.setText(vals[3]);
             this.computeValues();
+        } else if(resultCode == PLACES_RESULT) {
+            Parcelable[] locations = data.getParcelableArrayExtra("locations");
+            GeoCalcLocation o = Parcels.unwrap(locations[0]);
+            GeoCalcLocation d = Parcels.unwrap(locations[1]);
+
+            this.origLatField.setText(Double.toString(o.getLat()));
+            this.origLngField.setText(Double.toString(o.getLng()));
+            this.destLatField.setText(Double.toString(d.getLat()));
+            this.destLngField.setText(Double.toString(d.getLng()));
+            computeValues();
+
         }
     }
 
