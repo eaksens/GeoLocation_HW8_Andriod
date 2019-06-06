@@ -12,6 +12,9 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.parceler.Parcels;
 
 import java.util.Arrays;
@@ -21,6 +24,7 @@ public class SearchActivity extends AppCompatActivity {
 
     private TextView origLocationField;
     private TextView dstLocationField;
+    private TextView datePickerField;
     private GeoCalcLocation origLocation;
     private GeoCalcLocation dstLocation;
     public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -45,6 +49,7 @@ public class SearchActivity extends AppCompatActivity {
 
         origLocationField = findViewById(R.id.originPlace);
         dstLocationField = findViewById(R.id.dstPlace);
+        datePickerField = findViewById(R.id.datePicker);
 
         origLocationField.setOnClickListener(v -> {
             SET_LOCATION = 1;
@@ -56,6 +61,10 @@ public class SearchActivity extends AppCompatActivity {
             locationsPressed();
         });
 
+        DateTime now = DateTime.now();
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("MMMM dd, YYYY");
+        String time = fmt.print(now);
+        datePickerField.setText(time);
         origLocation = new GeoCalcLocation();
         dstLocation = new GeoCalcLocation();
     }
