@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.libraries.places.api.Places;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -61,13 +62,10 @@ public class MainActivity extends AppCompatActivity {
         //toolbar
         Toolbar myToolBar = findViewById(R.id.mainToolbar);
         setSupportActionBar(myToolBar);
-
+        Places.initialize(getApplicationContext(), "key");
         locations = new ArrayList<>();
-
-
         Button calBtn = findViewById(R.id.calculate);
         Button clearBtn = findViewById(R.id.clearBtn);
-
         origLatField = findViewById(R.id.lat1);
         destLatField = findViewById(R.id.lat2);
         origLngField = findViewById(R.id.long1);

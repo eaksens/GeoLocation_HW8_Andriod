@@ -41,7 +41,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     // firebase config
     implementation 'com.google.firebase:firebase-database:16.1.0'
-
+    implementation 'com.google.android.libraries.places:places:1.1.0'
     implementation 'org.parceler:parceler-api:1.1.9'
     annotationProcessor 'org.parceler:parceler:1.1.9'
 

@@ -8,4 +8,54 @@
     tools:context=".SearchActivity"
     tools:showIn="@layout/activity_search">
 
+    <TextView
+        android:id="@+id/locationsLabel"
+        android:layout_width="379dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center_vertical"
+        android:text="@string/location_info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/originPlace"
+        android:layout_width="379dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/colorPrimary"
+        android:drawableEnd="@drawable/ic_near_me_black_24dp"
+        android:drawableTint="@android:color/white"
+        android:gravity="center"
+        android:text="@string/org_location"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.437"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/locationsLabel" />
+
+    <TextView
+        android:id="@+id/dstPlace"
+        android:layout_width="380dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/colorPrimary"
+        android:drawableEnd="@drawable/ic_near_me_black_24dp"
+        android:drawableTint="@android:color/white"
+        android:gravity="center"
+        android:text="@string/dst_location"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/originPlace" />
 </android.support.constraint.ConstraintLayout>
