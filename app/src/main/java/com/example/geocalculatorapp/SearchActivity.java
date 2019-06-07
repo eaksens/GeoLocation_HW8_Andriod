@@ -1,11 +1,13 @@
 package com.example.geocalculatorapp;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.google.android.libraries.places.api.model.Place;
@@ -17,7 +19,10 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.parceler.Parcels;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
@@ -25,6 +30,7 @@ public class SearchActivity extends AppCompatActivity {
     private TextView origLocationField;
     private TextView dstLocationField;
     private TextView datePickerField;
+    private DatePickerDialog datePicker;
     private GeoCalcLocation origLocation;
     private GeoCalcLocation dstLocation;
     public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -65,6 +71,18 @@ public class SearchActivity extends AppCompatActivity {
         DateTimeFormatter fmt = DateTimeFormat.forPattern("MMMM dd, YYYY");
         String time = fmt.print(now);
         datePickerField.setText(time);
+        datePicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                String t = String.format("%d-%d-%d", year, month, dayOfMonth);
+                DateTime time = DateTime.parse(t, DateTimeFormat.forPattern("yyyy-mm-dd"));
+                datePickerField.setText(fmt.print(time));
+            }
+        }, now.getYear(), now.getDayOfMonth(), now.getDayOfMonth());
+
+        datePickerField.setOnClickListener(v -> {
+            datePicker.show();
+        });
         origLocation = new GeoCalcLocation();
         dstLocation = new GeoCalcLocation();
     }
@@ -74,6 +92,7 @@ public class SearchActivity extends AppCompatActivity {
         Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this);
         startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
