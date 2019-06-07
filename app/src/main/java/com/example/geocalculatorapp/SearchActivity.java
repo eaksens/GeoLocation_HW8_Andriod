@@ -71,13 +71,10 @@ public class SearchActivity extends AppCompatActivity {
         DateTimeFormatter fmt = DateTimeFormat.forPattern("MMMM dd, YYYY");
         String time = fmt.print(now);
         datePickerField.setText(time);
-        datePicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String t = String.format("%d-%d-%d", year, month, dayOfMonth);
-                DateTime time = DateTime.parse(t, DateTimeFormat.forPattern("yyyy-mm-dd"));
-                datePickerField.setText(fmt.print(time));
-            }
+        datePicker = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+            String t = String.format("%d-%d-%d", year, month, dayOfMonth);
+            DateTime time1 = DateTime.parse(t, DateTimeFormat.forPattern("yyyy-mm-dd"));
+            datePickerField.setText(fmt.print(time1));
         }, now.getYear(), now.getDayOfMonth(), now.getDayOfMonth());
 
         datePickerField.setOnClickListener(v -> {
