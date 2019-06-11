@@ -3,6 +3,9 @@ package com.example.geocalculatorapp.dummy;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.joda.time.DateTime;
 
 import java.security.AccessController;
@@ -26,15 +29,18 @@ public class HistoryContent {
     }
 
     static {
+        DatabaseReference topRef = FirebaseDatabase.getInstance().getReference();
+
         DateTime now = DateTime.now();
-        addItem(new HistoryItem("43.12444", "-85.3523", "42.1234", "85.3555",
-                now.minusDays(1)));
-        addItem(new HistoryItem("42.12444", "-77.3523", "42.1234", "85.3555",
-                now.minusDays(1)));
-        addItem(new HistoryItem("43.12444", "-85.3523", "42.1234", "85.3555",
-                now.plusDays(1)));
-        addItem(new HistoryItem("55.12444", "-85.3523", "42.1234", "85.3555",
-                now.plusDays(1)));
+//
+//        addItem(new HistoryItem("43.12444", "-85.3523", "42.1234", "85.3555",
+//                now.minusDays(1)));
+//        addItem(new HistoryItem("42.12444", "-77.3523", "42.1234", "85.3555",
+//                now.minusDays(1)));
+//        addItem(new HistoryItem("43.12444", "-85.3523", "42.1234", "85.3555",
+//                now.plusDays(1)));
+//        addItem(new HistoryItem("55.12444", "-85.3523", "42.1234", "85.3555",
+//                now.plusDays(1)));
     }
 
     public static class HistoryItem {

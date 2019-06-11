@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.geocalculatorapp.HistoryFragment.OnListFragmentInteractionListener;
-import com.example.geocalculatorapp.dummy.HistoryContent;
 import com.example.geocalculatorapp.dummy.HistoryContent.HistoryItem;
 import com.truizlop.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 
@@ -28,36 +27,38 @@ public class HistoryAdapter extends
                         HistoryAdapter.ViewHolder,
                         HistoryAdapter.FooterViewHolder> {
 
-//    private final List<HistoryItem> mValues;
-//    private final OnListFragmentInteractionListener mListener;
-//
-//    public HistoryAdapter(List<HistoryItem> items, OnListFragmentInteractionListener listener) {
-//        mValues = items;
-//        mListener = listener;
-//    }
-    //We will use a HashMap to break our history items into sets by day.
-    //Define this new data type and redefine the constructor of HistoryAdapter as follows:
     private final OnListFragmentInteractionListener mListener;
-    private final HashMap<String,List<HistoryItem>> dayValues;
+    private final HashMap<String,List<LocationLookup>> dayValues;
+    private final List<LocationLookup> current, future, past;
+
     private final List<String> sectionHeaders;
 
-    public HistoryAdapter(List<HistoryItem> items, OnListFragmentInteractionListener listener) {//mValues = items;
-        this.dayValues = new HashMap<String,List<HistoryItem>>();
-        this.sectionHeaders = new ArrayList<String>();
-        DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
-        for (HistoryItem hi : items) {
-            String key = "Entries for " + fmt.print(hi.timestamp);
-            List<HistoryItem> list = this.dayValues.get(key);
+    public HistoryAdapter(List<LocationLookup> items, OnListFragmentInteractionListener listener) {//mValues = items;
+        mListener = listener;
+
+        this.current = new ArrayList<LocationLookup>();
+        this.future = new ArrayList<LocationLookup>();
+        this.past = new ArrayList<LocationLookup>();
+
+        this.dayValues = new HashMap<>();
+        this.sectionHeaders = new ArrayList<>();
+
+        reloadFrom(items);
+    }
+
+    void reloadFrom(final List<LocationLookup> items) {
+        for (LocationLookup hi : items) {
+            String key = "Entries for " + hi.timeStamp;
+            List<LocationLookup> list = this.dayValues.get(key);
             if (list == null) {
-                list = new ArrayList<HistoryItem>();
+                list = new ArrayList<>();
                 this.dayValues.put(key, list);
                 this.sectionHeaders.add(key);
             }
             list.add(hi);
         }
-        mListener = listener;
+        notifyDataSetChanged();
     }
-
         //ViewHolder creating and defining data structure that hold convient references to individual control that shows up in individual content
 
     @Override
@@ -108,7 +109,7 @@ public class HistoryAdapter extends
         holder.mItem = this.dayValues.get(this.sectionHeaders.get(section)).get(position);
         holder.mP1.setText("(" + holder.mItem.origLat + "," + holder.mItem.origLng + ")");
         holder.mP2.setText("(" + holder.mItem.destLat + "," + holder.mItem.destLng + ")");
-        holder.mDateTime.setText(holder.mItem.timestamp.toString());
+        holder.mDateTime.setText(holder.mItem.timeStamp);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +130,7 @@ public class HistoryAdapter extends
         public final TextView mP1;
         public final TextView mP2;
         public final TextView mDateTime;
-        public HistoryItem mItem;
+        public LocationLookup mItem;
 
         public ViewHolder(View view) {
             super(view);
